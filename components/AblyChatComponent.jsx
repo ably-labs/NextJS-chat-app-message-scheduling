@@ -9,7 +9,7 @@ const AblyChatComponent = () => {
 
   const [messageText, setMessageText] = useState("");
   const [receivedMessages, setMessages] = useState([]);
-  const [delay, setDelay] = useState(3);
+  const [delay, setDelay] = useState(5);
   const [useDelay, setUseDelay] = useState(false);
   const [recurrence, setRecurrence] = useState(5);
   const [useRecurrence, setUseRecurrence] = useState(false);
@@ -37,7 +37,7 @@ const AblyChatComponent = () => {
 
   const handleDelayChange = (event) => {
     const requestedDelay = (event.target.value);
-    if (requestedDelay < 3) {
+    if (requestedDelay < 5) {
       return;
     }
     setDelay(requestedDelay);
