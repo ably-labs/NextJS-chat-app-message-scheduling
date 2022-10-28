@@ -9,6 +9,10 @@ const AblyChatComponent = () => {
 
   const [messageText, setMessageText] = useState("");
   const [receivedMessages, setMessages] = useState([]);
+  const [delay, setDelay] = useState(3);
+  const [useDelay, setUseDelay] = useState(false);
+  const [recurrence, setRecurrence] = useState(5);
+  const [useRecurrence, setUseRecurrence] = useState(false);
   const messageTextIsEmpty = messageText.trim().length === 0;
 
   const [channel, ably] = useChannel("chat-demo", (message) => {
@@ -17,7 +21,17 @@ const AblyChatComponent = () => {
   });
 
   const sendChatMessage = (messageText) => {
-    channel.publish({ name: "chat-message", data: messageText });
+    if (useDelay) { 
+      if (useRecurrence) {
+        console.log('using recurrence');
+        channel.scheduleMessage('chat-message', messageText, Date.now() + delay * 1000, recurrence);
+      } else {
+        console.log('not using recurrence');
+        channel.scheduleMessage('chat-message', messageText, Date.now() + delay * 1000);
+      }
+    } else {
+      channel.publish({ name: "chat-message", data: messageText });
+    }
     setMessageText("");
     inputBox.focus();
   }
@@ -25,6 +39,22 @@ const AblyChatComponent = () => {
   const handleFormSubmission = (event) => {
     event.preventDefault();
     sendChatMessage(messageText);
+  }
+
+  const handleDelayChange = (event) => {
+    const requestedDelay = (event.target.value);
+    if (requestedDelay < 3) {
+      return;
+    }
+    setDelay(requestedDelay);
+  }
+
+  const handleRecurrenceChange = (event) => {
+    const requestedRecurrence = (event.target.value);
+    if (requestedRecurrence < 3) {
+      return;
+    }
+    setRecurrence(requestedDelay);
   }
 
   const handleKeyPress = (event) => {
@@ -59,6 +89,16 @@ const AblyChatComponent = () => {
           onKeyPress={handleKeyPress}
           className={styles.textarea}
         ></textarea>
+        <input type="number" disabled={!useDelay} value={delay} onChange={handleDelayChange}></input>
+        <label>
+          use delay
+          <input type="checkbox" checked={useDelay} onChange={e => setUseDelay(!useDelay)}></input>
+        </label>
+        <input type="number" disabled={!(useRecurrence && useDelay)} value={recurrence} onChange={handleRecurrenceChange}></input>
+        <label>
+          use recurrence
+          <input type="checkbox" checked={useRecurrence} disabled={!useDelay} onChange={e => setUseRecurrence(!useRecurrence)}></input>
+        </label>
         <button type="submit" className={styles.button} disabled={messageTextIsEmpty}>Send</button>
       </form>
     </div>
