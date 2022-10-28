@@ -83,11 +83,11 @@ const AblyChatComponent = () => {
           onKeyPress={handleKeyPress}
           className={styles.textarea}
         ></textarea>
-        <input type="number" disabled={!useDelay} value={delay} onChange={handleDelayChange}></input>
         <label>
           use delay
           <input type="checkbox" checked={useDelay} onChange={e => setUseDelay(!useDelay)}></input>
         </label>
+        <input style={{'margin': '0.5rem'}} type="number" disabled={!useDelay} value={delay} onChange={handleDelayChange}></input>
         <button type="submit" className={styles.button} disabled={messageTextIsEmpty}>Send</button>
       </form>
     </div>
