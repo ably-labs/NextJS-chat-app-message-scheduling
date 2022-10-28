@@ -9,7 +9,7 @@
     "debug": "node --inspect-brk ./node_modules/next/dist/bin/next"
   },
   "dependencies": {
-    "ably": "ably/ably-js#message-scheduling",
+    "ably": "^1.2.30",
     "next": "^10.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1"
