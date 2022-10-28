@@ -22,13 +22,7 @@ const AblyChatComponent = () => {
 
   const sendChatMessage = (messageText) => {
     if (useDelay) { 
-      if (useRecurrence) {
-        console.log('using recurrence');
-        channel.scheduleMessage('chat-message', messageText, Date.now() + delay * 1000, recurrence);
-      } else {
-        console.log('not using recurrence');
-        channel.scheduleMessage('chat-message', messageText, Date.now() + delay * 1000);
-      }
+      channel.scheduleMessage('chat-message', messageText, Date.now() + delay * 1000);
     } else {
       channel.publish({ name: "chat-message", data: messageText });
     }
@@ -93,11 +87,6 @@ const AblyChatComponent = () => {
         <label>
           use delay
           <input type="checkbox" checked={useDelay} onChange={e => setUseDelay(!useDelay)}></input>
-        </label>
-        <input type="number" disabled={!(useRecurrence && useDelay)} value={recurrence} onChange={handleRecurrenceChange}></input>
-        <label>
-          use recurrence
-          <input type="checkbox" checked={useRecurrence} disabled={!useDelay} onChange={e => setUseRecurrence(!useRecurrence)}></input>
         </label>
         <button type="submit" className={styles.button} disabled={messageTextIsEmpty}>Send</button>
       </form>
